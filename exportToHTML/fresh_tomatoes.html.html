@@ -1,0 +1,194 @@
+<html>
+<head>
+<title>fresh_tomatoes.html</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { }
+.s1 { }
+.s2 { color: rgb(0,0,255); font-weight: bold; }
+.s3 { color: rgb(0,0,128); font-weight: bold; }
+.s4 { color: rgb(0,128,0); font-weight: bold; }
+.s5 { color: rgb(128,128,128); font-style: italic; }
+.s6 { color: rgb(0,0,128); font-weight: bold; }
+.s7 { color: rgb(0,0,255); font-weight: bold; }
+.s8 { color: rgb(0,0,255); }
+.s9 { color: rgb(0,128,0); font-weight: bold; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+fresh_tomatoes.html</FONT>
+</center></TD></TR></TABLE>
+<pre>
+
+<span class="s0">import webbrowser 
+import os 
+import re 
+ 
+ 
+# Styles and scripting for the page 
+main_page_head = ''' 
+</span><span class="s1">&lt;!DOCTYPE </span><span class="s2">html</span><span class="s1">&gt;</span><span class="s0"> 
+</span><span class="s1">&lt;</span><span class="s3">html </span><span class="s2">lang=</span><span class="s4">&quot;en&quot;</span><span class="s1">&gt;</span><span class="s0"> 
+</span><span class="s1">&lt;</span><span class="s3">head</span><span class="s1">&gt;</span><span class="s0"> 
+    </span><span class="s1">&lt;</span><span class="s3">meta </span><span class="s2">charset=</span><span class="s4">&quot;utf-8&quot;</span><span class="s1">&gt;</span><span class="s0"> 
+    </span><span class="s1">&lt;</span><span class="s3">title</span><span class="s1">&gt;</span><span class="s0">Fresh Tomatoes!</span><span class="s1">&lt;/</span><span class="s3">title</span><span class="s1">&gt;</span><span class="s0"> 
+    </span><span class="s5">&lt;!-- Bootstrap 3 --&gt;</span><span class="s0"> 
+    </span><span class="s1">&lt;</span><span class="s3">link </span><span class="s2">rel=</span><span class="s4">&quot;stylesheet&quot; </span><span class="s2">href=</span><span class="s4">&quot;https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css&quot;</span><span class="s1">&gt;</span><span class="s0"> 
+    </span><span class="s1">&lt;</span><span class="s3">link </span><span class="s2">rel=</span><span class="s4">&quot;stylesheet&quot; </span><span class="s2">href=</span><span class="s4">&quot;https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css&quot;</span><span class="s1">&gt;</span><span class="s0"> 
+    </span><span class="s1">&lt;</span><span class="s3">script </span><span class="s2">src=</span><span class="s4">&quot;http://code.jquery.com/jquery-1.10.1.min.js&quot;</span><span class="s1">&gt;&lt;/</span><span class="s3">script</span><span class="s1">&gt;</span><span class="s0"> 
+    </span><span class="s1">&lt;</span><span class="s3">script </span><span class="s2">src=</span><span class="s4">&quot;https://netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js&quot;</span><span class="s1">&gt;&lt;/</span><span class="s3">script</span><span class="s1">&gt;</span><span class="s0"> 
+    </span><span class="s1">&lt;</span><span class="s3">style </span><span class="s2">type=</span><span class="s4">&quot;text/css&quot; </span><span class="s2">media=</span><span class="s4">&quot;screen&quot;</span><span class="s1">&gt;</span><span class="s0"> 
+        </span><span class="s6">body </span><span class="s0">{ 
+            </span><span class="s7">padding-top</span><span class="s0">: </span><span class="s8">80</span><span class="s9">px</span><span class="s0">; 
+        } 
+        </span><span class="s6">#trailer </span><span class="s0">.</span><span class="s6">modal-dialog </span><span class="s0">{ 
+            </span><span class="s7">margin-top</span><span class="s0">: </span><span class="s8">200</span><span class="s9">px</span><span class="s0">; 
+            </span><span class="s7">width</span><span class="s0">: </span><span class="s8">640</span><span class="s9">px</span><span class="s0">; 
+            </span><span class="s7">height</span><span class="s0">: </span><span class="s8">480</span><span class="s9">px</span><span class="s0">; 
+        } 
+        .</span><span class="s6">hanging-close </span><span class="s0">{ 
+            </span><span class="s7">position</span><span class="s0">: </span><span class="s9">absolute</span><span class="s0">; 
+            </span><span class="s7">top</span><span class="s0">: -</span><span class="s8">12</span><span class="s9">px</span><span class="s0">; 
+            </span><span class="s7">right</span><span class="s0">: -</span><span class="s8">12</span><span class="s9">px</span><span class="s0">; 
+            </span><span class="s7">z-index</span><span class="s0">: </span><span class="s8">9001</span><span class="s0">; 
+        } 
+        </span><span class="s6">#trailer-video </span><span class="s0">{ 
+            </span><span class="s7">width</span><span class="s0">: </span><span class="s8">100</span><span class="s0">%; 
+            </span><span class="s7">height</span><span class="s0">: </span><span class="s8">100</span><span class="s0">%; 
+        } 
+        .</span><span class="s6">movie-tile </span><span class="s0">{ 
+            </span><span class="s7">margin-bottom</span><span class="s0">: </span><span class="s8">20</span><span class="s9">px</span><span class="s0">; 
+            </span><span class="s7">padding-top</span><span class="s0">: </span><span class="s8">20</span><span class="s9">px</span><span class="s0">; 
+        } 
+        .</span><span class="s6">movie-tile</span><span class="s0">:</span><span class="s6">hover </span><span class="s0">{ 
+            </span><span class="s7">background-color</span><span class="s0">: </span><span class="s6">#EEE</span><span class="s0">; 
+            </span><span class="s7">cursor</span><span class="s0">: </span><span class="s9">pointer</span><span class="s0">; 
+        } 
+        .</span><span class="s6">scale-media </span><span class="s0">{ 
+            </span><span class="s7">padding-bottom</span><span class="s0">: </span><span class="s8">56.25</span><span class="s0">%; 
+            </span><span class="s7">position</span><span class="s0">: </span><span class="s9">relative</span><span class="s0">; 
+        } 
+        .</span><span class="s6">scale-media iframe </span><span class="s0">{ 
+            </span><span class="s7">border</span><span class="s0">: </span><span class="s9">none</span><span class="s0">; 
+            </span><span class="s7">height</span><span class="s0">: </span><span class="s8">100</span><span class="s0">%; 
+            </span><span class="s7">position</span><span class="s0">: </span><span class="s9">absolute</span><span class="s0">; 
+            </span><span class="s7">width</span><span class="s0">: </span><span class="s8">100</span><span class="s0">%; 
+            </span><span class="s7">left</span><span class="s0">: </span><span class="s8">0</span><span class="s0">; 
+            </span><span class="s7">top</span><span class="s0">: </span><span class="s8">0</span><span class="s0">; 
+            </span><span class="s7">background-color</span><span class="s0">: </span><span class="s9">white</span><span class="s0">; 
+        } 
+    </span><span class="s1">&lt;/</span><span class="s3">style</span><span class="s1">&gt;</span><span class="s0"> 
+    </span><span class="s1">&lt;</span><span class="s3">script </span><span class="s2">type=</span><span class="s4">&quot;text/javascript&quot; </span><span class="s2">charset=</span><span class="s4">&quot;utf-8&quot;</span><span class="s1">&gt;</span><span class="s0"> 
+        </span><span class="s5">// Pause the video when the modal is closed</span><span class="s0"> 
+        $(document).on(</span><span class="s9">'click'</span><span class="s0">, </span><span class="s9">'.hanging-close, .modal-backdrop, .modal'</span><span class="s0">, </span><span class="s6">function </span><span class="s0">(event) { 
+            </span><span class="s5">// Remove the src so the player itself gets removed, as this is the only</span><span class="s0"> 
+            </span><span class="s5">// reliable way to ensure the video stops playing in IE</span><span class="s0"> 
+            $(</span><span class="s9">&quot;#trailer-video-container&quot;</span><span class="s0">).empty(); 
+        }); 
+        </span><span class="s5">// Start playing the video whenever the trailer modal is opened</span><span class="s0"> 
+        $(document).on(</span><span class="s9">'click'</span><span class="s0">, </span><span class="s9">'.movie-tile'</span><span class="s0">, </span><span class="s6">function </span><span class="s0">(event) { 
+            </span><span class="s6">var </span><span class="s0">trailerYouTubeId = $(</span><span class="s6">this</span><span class="s0">).attr(</span><span class="s9">'data-trailer-youtube-id'</span><span class="s0">) 
+            </span><span class="s6">var </span><span class="s0">sourceUrl = </span><span class="s9">'http://www.youtube.com/embed/' </span><span class="s0">+ trailerYouTubeId + </span><span class="s9">'?autoplay=1&amp;html5=1'</span><span class="s0">; 
+            $(</span><span class="s9">&quot;#trailer-video-container&quot;</span><span class="s0">).empty().append($(</span><span class="s9">&quot;&lt;iframe&gt;&lt;/iframe&gt;&quot;</span><span class="s0">, { 
+              </span><span class="s9">'id'</span><span class="s0">: </span><span class="s9">'trailer-video'</span><span class="s0">, 
+              </span><span class="s9">'type'</span><span class="s0">: </span><span class="s9">'text-html'</span><span class="s0">, 
+              </span><span class="s9">'src'</span><span class="s0">: sourceUrl, 
+              </span><span class="s9">'frameborder'</span><span class="s0">: </span><span class="s8">0</span><span class="s0"> 
+            })); 
+        }); 
+        </span><span class="s5">// Animate in the movies when the page loads</span><span class="s0"> 
+        $(document).ready(</span><span class="s6">function </span><span class="s0">() { 
+          $(</span><span class="s9">'.movie-tile'</span><span class="s0">).hide().first().show(</span><span class="s9">&quot;fast&quot;</span><span class="s0">, </span><span class="s6">function </span><span class="s0">showNext() { 
+            $(</span><span class="s6">this</span><span class="s0">).next(</span><span class="s9">&quot;div&quot;</span><span class="s0">).show(</span><span class="s9">&quot;fast&quot;</span><span class="s0">, showNext); 
+          }); 
+        }); 
+    </span><span class="s1">&lt;/</span><span class="s3">script</span><span class="s1">&gt;</span><span class="s0"> 
+</span><span class="s1">&lt;/</span><span class="s3">head</span><span class="s1">&gt;</span><span class="s0"> 
+''' 
+ 
+ 
+# The main page layout and title bar 
+main_page_content = ''' 
+  </span><span class="s1">&lt;</span><span class="s3">body</span><span class="s1">&gt;</span><span class="s0"> 
+    </span><span class="s5">&lt;!-- Trailer Video Modal --&gt;</span><span class="s0"> 
+    </span><span class="s1">&lt;</span><span class="s3">div </span><span class="s2">class=</span><span class="s4">&quot;modal&quot; </span><span class="s2">id=</span><span class="s4">&quot;trailer&quot;</span><span class="s1">&gt;</span><span class="s0"> 
+      </span><span class="s1">&lt;</span><span class="s3">div </span><span class="s2">class=</span><span class="s4">&quot;modal-dialog&quot;</span><span class="s1">&gt;</span><span class="s0"> 
+        </span><span class="s1">&lt;</span><span class="s3">div </span><span class="s2">class=</span><span class="s4">&quot;modal-content&quot;</span><span class="s1">&gt;</span><span class="s0"> 
+          </span><span class="s1">&lt;</span><span class="s3">a </span><span class="s2">href=</span><span class="s4">&quot;#&quot; </span><span class="s2">class=</span><span class="s4">&quot;hanging-close&quot; </span><span class="s2">data-dismiss=</span><span class="s4">&quot;modal&quot; </span><span class="s2">aria-hidden=</span><span class="s4">&quot;true&quot;</span><span class="s1">&gt;</span><span class="s0"> 
+            </span><span class="s1">&lt;</span><span class="s3">img </span><span class="s2">src=</span><span class="s4">&quot;https://lh5.ggpht.com/v4-628SilF0HtHuHdu5EzxD7WRqOrrTIDi_MhEG6_qkNtUK5Wg7KPkofp_VJoF7RS2LhxwEFCO1ICHZlc-o_=s0#w=24&amp;h=24&quot;</span><span class="s1">/&gt;</span><span class="s0"> 
+          </span><span class="s1">&lt;/</span><span class="s3">a</span><span class="s1">&gt;</span><span class="s0"> 
+          </span><span class="s1">&lt;</span><span class="s3">div </span><span class="s2">class=</span><span class="s4">&quot;scale-media&quot; </span><span class="s2">id=</span><span class="s4">&quot;trailer-video-container&quot;</span><span class="s1">&gt;</span><span class="s0"> 
+          </span><span class="s1">&lt;/</span><span class="s3">div</span><span class="s1">&gt;</span><span class="s0"> 
+        </span><span class="s1">&lt;/</span><span class="s3">div</span><span class="s1">&gt;</span><span class="s0"> 
+      </span><span class="s1">&lt;/</span><span class="s3">div</span><span class="s1">&gt;</span><span class="s0"> 
+    </span><span class="s1">&lt;/</span><span class="s3">div</span><span class="s1">&gt;</span><span class="s0"> 
+    </span><span class="s5">&lt;!-- Main Page Content --&gt;</span><span class="s0"> 
+    </span><span class="s1">&lt;</span><span class="s3">div </span><span class="s2">class=</span><span class="s4">&quot;container&quot;</span><span class="s1">&gt;</span><span class="s0"> 
+      </span><span class="s1">&lt;</span><span class="s3">div </span><span class="s2">class=</span><span class="s4">&quot;navbar navbar-inverse navbar-fixed-top&quot; </span><span class="s2">role=</span><span class="s4">&quot;navigation&quot;</span><span class="s1">&gt;</span><span class="s0"> 
+        </span><span class="s1">&lt;</span><span class="s3">div </span><span class="s2">class=</span><span class="s4">&quot;container&quot;</span><span class="s1">&gt;</span><span class="s0"> 
+          </span><span class="s1">&lt;</span><span class="s3">div </span><span class="s2">class=</span><span class="s4">&quot;navbar-header&quot;</span><span class="s1">&gt;</span><span class="s0"> 
+            </span><span class="s1">&lt;</span><span class="s3">a </span><span class="s2">class=</span><span class="s4">&quot;navbar-brand&quot; </span><span class="s2">href=</span><span class="s4">&quot;#&quot;</span><span class="s1">&gt;</span><span class="s0">Fresh Tomatoes Movie Trailers</span><span class="s1">&lt;/</span><span class="s3">a</span><span class="s1">&gt;</span><span class="s0"> 
+          </span><span class="s1">&lt;/</span><span class="s3">div</span><span class="s1">&gt;</span><span class="s0"> 
+        </span><span class="s1">&lt;/</span><span class="s3">div</span><span class="s1">&gt;</span><span class="s0"> 
+      </span><span class="s1">&lt;/</span><span class="s3">div</span><span class="s1">&gt;</span><span class="s0"> 
+    </span><span class="s1">&lt;/</span><span class="s3">div</span><span class="s1">&gt;</span><span class="s0"> 
+    </span><span class="s1">&lt;</span><span class="s3">div </span><span class="s2">class=</span><span class="s4">&quot;container&quot;</span><span class="s1">&gt;</span><span class="s0"> 
+      {movie_tiles} 
+    </span><span class="s1">&lt;/</span><span class="s3">div</span><span class="s1">&gt;</span><span class="s0"> 
+  </span><span class="s1">&lt;/</span><span class="s3">body</span><span class="s1">&gt;</span><span class="s0"> 
+</span><span class="s1">&lt;/</span><span class="s3">html</span><span class="s1">&gt;</span><span class="s0"> 
+''' 
+ 
+ 
+# A single movie entry html template 
+movie_tile_content = ''' 
+</span><span class="s1">&lt;</span><span class="s3">div </span><span class="s2">class=</span><span class="s4">&quot;col-md-6 col-lg-4 movie-tile text-center&quot; </span><span class="s2">data-trailer-youtube-id=</span><span class="s4">&quot;{trailer_youtube_id}&quot; </span><span class="s2">data-toggle=</span><span class="s4">&quot;modal&quot; </span><span class="s2">data-target=</span><span class="s4">&quot;#trailer&quot;</span><span class="s1">&gt;</span><span class="s0"> 
+    </span><span class="s1">&lt;</span><span class="s3">img </span><span class="s2">src=</span><span class="s4">&quot;{poster_image_url}&quot; </span><span class="s2">width=</span><span class="s4">&quot;220&quot; </span><span class="s2">height=</span><span class="s4">&quot;342&quot;</span><span class="s1">&gt;</span><span class="s0"> 
+    </span><span class="s1">&lt;</span><span class="s3">h2</span><span class="s1">&gt;</span><span class="s0">{movie_title}</span><span class="s1">&lt;/</span><span class="s3">h2</span><span class="s1">&gt;</span><span class="s0"> 
+</span><span class="s1">&lt;/</span><span class="s3">div</span><span class="s1">&gt;</span><span class="s0"> 
+''' 
+ 
+ 
+def create_movie_tiles_content(movies): 
+    # The HTML content for this section of the page 
+    content = '' 
+    for movie in movies: 
+        # Extract the youtube ID from the url 
+        youtube_id_match = re.search( 
+            r'(?&lt;=v=)[^&amp;#]+', movie.trailer_youtube_url) 
+        youtube_id_match = youtube_id_match or re.search( 
+            r'(?&lt;=be/)[^&amp;#]+', movie.trailer_youtube_url) 
+        trailer_youtube_id = (youtube_id_match.group(0) if youtube_id_match 
+                              else None) 
+ 
+        # Append the tile for the movie with its content filled in 
+        content += movie_tile_content.format( 
+            movie_title=movie.title, 
+            poster_image_url=movie.poster_image_url, 
+            trailer_youtube_id=trailer_youtube_id 
+        ) 
+    return content 
+ 
+ 
+def open_movies_page(movies): 
+    # Create or overwrite the output file 
+    output_file = open('fresh_tomatoes.html', 'w') 
+ 
+    # Replace the movie tiles placeholder generated content 
+    rendered_content = main_page_content.format( 
+        movie_tiles=create_movie_tiles_content(movies)) 
+ 
+    # Output the file 
+    output_file.write(main_page_head + rendered_content) 
+    output_file.close() 
+ 
+    # open the output file in the browser (in a new tab, if possible) 
+    url = os.path.abspath(output_file.name) 
+    webbrowser.open('file://' + url, new=2) 
+</span></pre>
+</body>
+</html>

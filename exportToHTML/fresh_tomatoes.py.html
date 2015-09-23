@@ -1,0 +1,192 @@
+<html>
+<head>
+<title>fresh_tomatoes.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { }
+.s1 { color: rgb(0,128,0); font-weight: bold; }
+.s2 { color: rgb(0,0,128); font-weight: bold; }
+.s3 { color: rgb(128,128,128); font-style: italic; }
+.s4 { color: rgb(0,0,255); }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+fresh_tomatoes.py</FONT>
+</center></TD></TR></TABLE>
+<pre>
+
+<span class="s0">__author__ = </span><span class="s1">'davidstroud'</span><span class="s0"> 
+ 
+</span><span class="s2">import </span><span class="s0">webbrowser 
+</span><span class="s2">import </span><span class="s0">os 
+</span><span class="s2">import </span><span class="s0">re 
+ 
+ 
+</span><span class="s3"># Styles and scripting for the page</span><span class="s0"> 
+main_page_head = </span><span class="s1">''' 
+&lt;!DOCTYPE html&gt; 
+&lt;html lang=&quot;en&quot;&gt; 
+&lt;head&gt; 
+    &lt;meta charset=&quot;utf-8&quot;&gt; 
+    &lt;title&gt;Fresh Tomatoes!&lt;/title&gt; 
+ 
+    &lt;!-- Bootstrap 3 --&gt; 
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css&quot;&gt; 
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css&quot;&gt; 
+    &lt;script src=&quot;http://code.jquery.com/jquery-1.10.1.min.js&quot;&gt;&lt;/script&gt; 
+    &lt;script src=&quot;https://netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js&quot;&gt;&lt;/script&gt; 
+    &lt;style type=&quot;text/css&quot; media=&quot;screen&quot;&gt; 
+        body { 
+            padding-top: 80px; 
+        } 
+        #trailer .modal-dialog { 
+            margin-top: 200px; 
+            width: 640px; 
+            height: 480px; 
+        } 
+        .hanging-close { 
+            position: absolute; 
+            top: -12px; 
+            right: -12px; 
+            z-index: 9001; 
+        } 
+        #trailer-video { 
+            width: 100%; 
+            height: 100%; 
+        } 
+        .movie-tile { 
+            margin-bottom: 20px; 
+            padding-top: 20px; 
+        } 
+        .movie-tile:hover { 
+            background-color: #EEE; 
+            cursor: pointer; 
+        } 
+        .scale-media { 
+            padding-bottom: 56.25%; 
+            position: relative; 
+        } 
+        .scale-media iframe { 
+            border: none; 
+            height: 100%; 
+            position: absolute; 
+            width: 100%; 
+            left: 0; 
+            top: 0; 
+            background-color: white; 
+        } 
+    &lt;/style&gt; 
+    &lt;script type=&quot;text/javascript&quot; charset=&quot;utf-8&quot;&gt; 
+        // Pause the video when the modal is closed 
+        $(document).on('click', '.hanging-close, .modal-backdrop, .modal', function (event) { 
+            // Remove the src so the player itself gets removed, as this is the only 
+            // reliable way to ensure the video stops playing in IE 
+            $(&quot;#trailer-video-container&quot;).empty(); 
+        }); 
+        // Start playing the video whenever the trailer modal is opened 
+        $(document).on('click', '.movie-tile', function (event) { 
+            var trailerYouTubeId = $(this).attr('data-trailer-youtube-id') 
+            var sourceUrl = 'http://www.youtube.com/embed/' + trailerYouTubeId + '?autoplay=1&amp;html5=1'; 
+            $(&quot;#trailer-video-container&quot;).empty().append($(&quot;&lt;iframe&gt;&lt;/iframe&gt;&quot;, { 
+              'id': 'trailer-video', 
+              'type': 'text-html', 
+              'src': sourceUrl, 
+              'frameborder': 0 
+            })); 
+        }); 
+        // Animate in the movies when the page loads 
+        $(document).ready(function () { 
+          $('.movie-tile').hide().first().show(&quot;fast&quot;, function showNext() { 
+            $(this).next(&quot;div&quot;).show(&quot;fast&quot;, showNext); 
+          }); 
+        }); 
+    &lt;/script&gt; 
+&lt;/head&gt; 
+'''</span><span class="s0"> 
+ 
+ 
+</span><span class="s3"># The main page layout and title bar</span><span class="s0"> 
+main_page_content = </span><span class="s1">''' 
+  &lt;body&gt; 
+    &lt;!-- Trailer Video Modal --&gt; 
+    &lt;div class=&quot;modal&quot; id=&quot;trailer&quot;&gt; 
+      &lt;div class=&quot;modal-dialog&quot;&gt; 
+        &lt;div class=&quot;modal-content&quot;&gt; 
+          &lt;a href=&quot;#&quot; class=&quot;hanging-close&quot; data-dismiss=&quot;modal&quot; aria-hidden=&quot;true&quot;&gt; 
+            &lt;img src=&quot;https://lh5.ggpht.com/v4-628SilF0HtHuHdu5EzxD7WRqOrrTIDi_MhEG6_qkNtUK5Wg7KPkofp_VJoF7RS2LhxwEFCO1ICHZlc-o_=s0#w=24&amp;h=24&quot;/&gt; 
+          &lt;/a&gt; 
+          &lt;div class=&quot;scale-media&quot; id=&quot;trailer-video-container&quot;&gt; 
+          &lt;/div&gt; 
+        &lt;/div&gt; 
+      &lt;/div&gt; 
+    &lt;/div&gt; 
+ 
+    &lt;!-- Main Page Content --&gt; 
+    &lt;div class=&quot;container&quot;&gt; 
+      &lt;div class=&quot;navbar navbar-inverse navbar-fixed-top&quot; role=&quot;navigation&quot;&gt; 
+        &lt;div class=&quot;container&quot;&gt; 
+          &lt;div class=&quot;navbar-header&quot;&gt; 
+            &lt;a class=&quot;navbar-brand&quot; href=&quot;#&quot;&gt;Fresh Tomatoes Movie Trailers&lt;/a&gt; 
+          &lt;/div&gt; 
+        &lt;/div&gt; 
+      &lt;/div&gt; 
+    &lt;/div&gt; 
+    &lt;div class=&quot;container&quot;&gt; 
+      {movie_tiles} 
+    &lt;/div&gt; 
+  &lt;/body&gt; 
+&lt;/html&gt; 
+'''</span><span class="s0"> 
+ 
+ 
+</span><span class="s3"># A single movie entry html template</span><span class="s0"> 
+movie_tile_content = </span><span class="s1">''' 
+&lt;div class=&quot;col-md-6 col-lg-4 movie-tile text-center&quot; data-trailer-youtube-id=&quot;{trailer_youtube_id}&quot; data-toggle=&quot;modal&quot; data-target=&quot;#trailer&quot;&gt; 
+    &lt;img src=&quot;{poster_image_url}&quot; width=&quot;220&quot; height=&quot;342&quot;&gt; 
+    &lt;h2&gt;{movie_title}&lt;/h2&gt; 
+&lt;/div&gt; 
+'''</span><span class="s0"> 
+ 
+ 
+</span><span class="s2">def </span><span class="s0">create_movie_tiles_content(movies): 
+    </span><span class="s3"># The HTML content for this section of the page</span><span class="s0"> 
+    content = </span><span class="s1">''</span><span class="s0"> 
+    </span><span class="s2">for </span><span class="s0">movie </span><span class="s2">in </span><span class="s0">movies: 
+        </span><span class="s3"># Extract the youtube ID from the url</span><span class="s0"> 
+        youtube_id_match = re.search( 
+            </span><span class="s1">r'(?&lt;=v=)[^&amp;#]+'</span><span class="s0">, movie.trailer_youtube_url) 
+        youtube_id_match = youtube_id_match </span><span class="s2">or </span><span class="s0">re.search( 
+            </span><span class="s1">r'(?&lt;=be/)[^&amp;#]+'</span><span class="s0">, movie.trailer_youtube_url) 
+        trailer_youtube_id = (youtube_id_match.group(</span><span class="s4">0</span><span class="s0">) </span><span class="s2">if </span><span class="s0">youtube_id_match 
+                              </span><span class="s2">else </span><span class="s0">None) 
+ 
+        </span><span class="s3"># Append the tile for the movie with its content filled in</span><span class="s0"> 
+        content += movie_tile_content.format( 
+            movie_title=movie.title, 
+            poster_image_url=movie.poster_image_url, 
+            trailer_youtube_id=trailer_youtube_id 
+        ) 
+    </span><span class="s2">return </span><span class="s0">content 
+ 
+ 
+</span><span class="s2">def </span><span class="s0">open_movies_page(movies): 
+    </span><span class="s3"># Create or overwrite the output file</span><span class="s0"> 
+    output_file = open(</span><span class="s1">'fresh_tomatoes.html'</span><span class="s0">, </span><span class="s1">'w'</span><span class="s0">) 
+ 
+    </span><span class="s3"># Replace the movie tiles placeholder generated content</span><span class="s0"> 
+    rendered_content = main_page_content.format( 
+        movie_tiles=create_movie_tiles_content(movies)) 
+ 
+    </span><span class="s3"># Output the file</span><span class="s0"> 
+    output_file.write(main_page_head + rendered_content) 
+    output_file.close() 
+ 
+    </span><span class="s3"># open the output file in the browser (in a new tab, if possible)</span><span class="s0"> 
+    url = os.path.abspath(output_file.name) 
+    webbrowser.open(</span><span class="s1">'file://' </span><span class="s0">+ url, new=</span><span class="s4">2</span><span class="s0">)</span></pre>
+</body>
+</html>
