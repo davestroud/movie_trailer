@@ -1,4 +1,6 @@
 # movie_trailer
 Short Movie Trailers 
 
-Short Movie Trailers has a movies poster as well as a short movie trailer.  
+Short Movie Trailers has a movies poster as well as a short movie trailer.
+
+ More info to follow
