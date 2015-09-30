@@ -8,11 +8,11 @@ god_father = media.Movie("The Godfather",
 casino = media.Movie("Casino",
                      "The story of the Las Vega Mafia",
                      "http://goo.gl/QJnBoz",
-                     "https://goo.gl/Ouxwzc")
+                     "https://youtu.be/-L5Zx34mjUU")
 the_departed = media.Movie("The Departed ",
                            "A rogue cop's undercover life in the Boston Mafia",
                            "http://goo.gl/ClJt3o",
-                           "https://goo.gl/CuOlP6")
+                           "https://youtu.be/iQpb1LoeVUc")
 # define array of movies
 movies = [god_father, casino, the_departed]
 # calls the function open_movies_page
