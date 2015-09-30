@@ -1,6 +1,7 @@
 import fresh_tomatoes
 import media
 # create  and define instances of the class movie to build the objects.
+# used url shortener to shorten youtube links
 god_father = media.Movie("The Godfather",
                          "A story of a mans live in la cosa nostra",
                          "https://goo.gl/Ad6SvC",
