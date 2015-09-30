@@ -4,6 +4,7 @@ import webbrowser
 # define and initialize class Movie.
 # Constructor is called and self is initialized.
 class Movie:
+    """Return the pathname of the Movie root directory."""
     def __init__(self, movie_title, movie_storyline,
                  poster_image, trailer_youtube):
         # create instance variables
